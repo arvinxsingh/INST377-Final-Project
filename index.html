@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="Project.css">
 
     <!-- USING CHART JS AND AOS (Animate on Scroll -->   
+    <!-- 3 fetch calls 1 to theAccuWeather API and 2 to the supabase -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
@@ -100,6 +101,8 @@
 
         // Professor said supabase can be hit from using an API in the font end
         // Not reccommened tho because could expose significant risks in the real world  
+        // 3 fetch calls 1 to theAccuWeather API and 2 to the supabase 
+
         const supabaseUrl = 'https://lonjmeqrcktidifmjvfa.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxvbmptZXFyY2t0aWRpZm1qdmZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxNzI0MzMsImV4cCI6MjA2Mjc0ODQzM30.XbDwdjP2mBMRdUxb6mLVq_ow_301PAADr-RsjbEW9SQ';
         const client = supabase.createClient(supabaseUrl, supabaseKey);
