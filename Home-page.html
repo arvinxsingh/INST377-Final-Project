@@ -3,17 +3,16 @@
     <title>Home Page</title>
     <link rel="stylesheet" href="Project.css">
 
-    <!-- USING CHART JS AND AOS (Animate on Scroll -->
+    <!-- USING CHART JS AND AOS (Animate on Scroll -->   
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 
 <body id="backgroundColor">
     <h1>East Coast Weather - Home Page</h1>
- 
-    
+
     <nav id="mainNavigation">
         <ul>    
             <li><a href="Home-page.html">Home page</a></li>
@@ -28,11 +27,29 @@
         <canvas id="weatherChart" width="400" height="200"></canvas>
     </div>
 
+    <div class="weather-box" data-aos="fade-up">
+        <h2>Where are your from?</h2>
+        <form id="userForm">
+            <input type="text" id="firstName" placeholder="First Name" required><br>
+            <input type="text" id="lastName" placeholder="Last Name" required><br>
+            <input type="text" id="city" placeholder="City" required><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+
+
+    <div class="weather-box" id="recommendationBox" data-aos="fade-up">
+        <h2>Previous Submissions</h2>
+        <ul id="entriesList"></ul>
+    </div>
+
     <script>
         AOS.init();
 
-        const apiKey = '6WPHaVqhH7vE4LBjPCIYtyxF1mURWrhL'; 
-        const locationKey = '349727';  
+
+        const apiKey = '6WPHaVqhH7vE4LBjPCIYtyxF1mURWrhL';
+        const locationKey = '349727';
 
         async function getWeatherInfo() {
             try {
@@ -68,7 +85,6 @@
                         tension: 0.4
                     }]
                 },
-
                 options: {
                     responsive: true,
                     scales: {
@@ -81,8 +97,69 @@
         }
 
         getWeatherInfo();
+
+        // Professor said supabase can be hit from using an API in the font end
+        // Not reccommened tho because could expose significant risks in the real world  
+        const supabaseUrl = 'https://lonjmeqrcktidifmjvfa.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxvbmptZXFyY2t0aWRpZm1qdmZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxNzI0MzMsImV4cCI6MjA2Mjc0ODQzM30.XbDwdjP2mBMRdUxb6mLVq_ow_301PAADr-RsjbEW9SQ';
+        const client = supabase.createClient(supabaseUrl, supabaseKey);
+
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const city = document.getElementById('city').value.trim();
+
+            if (!firstName || !lastName || !city) {
+                alert("Please fill all fields.");
+                return;
+            }
+
+            const { error } = await client.from('Customer_info_project').insert({
+                customer_first_name: firstName,
+                customer_last_name: lastName,
+                customer_city: city
+            });
+
+            if (error) {
+                console.error("Insert error:", error);
+                alert("There was an error submitting your data");
+            } else {
+                document.getElementById('userForm').reset();
+                fetchEntries();
+            }
+        });
+
+        async function fetchEntries() {
+            const { data, error } = await client
+                .from('Customer_info_project')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            const list = document.getElementById('entriesList');
+            list.innerHTML = '';
+
+            if (error) {
+                console.error("Fetch error:", error);
+                return;
+            }
+
+            data.forEach(entry => {
+                const item = document.createElement('li');
+                item.textContent = `${entry.customer_first_name} ${entry.customer_last_name} from ${entry.customer_city}`;
+                list.appendChild(item);
+            });
+        }
+
+        fetchEntries();
     </script>
 
 
 </body>
 </html>
+
+
+
+
+
+

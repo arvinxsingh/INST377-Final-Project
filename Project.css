@@ -2,12 +2,14 @@
     background-color: rgb(171, 219, 255);
     margin: 0;
     padding: 0;
+    transition: background-color 0.6s ease;
 }
 
 #mainNavigation {
     background-color: rgb(207, 121, 36);
     text-align: center;
     padding: 10px 0;
+    transition: background-color 0.5s ease;
 }
 
 #mainNavigation ul {
@@ -20,6 +22,7 @@
     display: inline-block;
     padding: 8px;
     text-align: center;
+    transition: background-color 0.3s ease;
 }
 
 #mainNavigation li a {
@@ -27,10 +30,17 @@
     position: relative;
     color: white;
     font-size: 1.1em;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 #mainNavigation li:hover {
     background-color: rgb(115, 159, 222);
+}
+
+#mainNavigation li a:hover {
+    transform: scale(1.05);
+    color: #f0f0f0;
 }
 
 #mainNavigation ul ul {
@@ -46,6 +56,7 @@
     padding: 25px;
     border-radius: 10px;
     text-align: center;
+    animation: fadeIn 0.6s ease-in-out;
 }
 
 .weather-box input[type="text"] {
@@ -55,6 +66,11 @@
     font-size: 1em;
     border: 1px solid #ccc;
     border-radius: 6px;
+    transition: box-shadow 0.3s ease;
+}
+
+.weather-box input[type="text"]:focus {
+    box-shadow: 0 0 5px rgba(100, 100, 255, 0.4);
 }
 
 .weather-box button {
@@ -64,40 +80,33 @@
     font-size: 1em;
     border: none;
     border-radius: 6px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .weather-box button:hover {
     background-color: rgb(167, 97, 25);
+    transform: scale(1.05);
 }
 
 .weather-display {
     margin-top: 20px;
     font-size: 1.1em;
     color: #333;
+    transition: opacity 0.3s ease;
 }
 
-@media (max-width: 600px) {
-    .weather-box {
-        width: 90%;
-        padding: 20px;
-    }
-
-    #mainNavigation ul li {
-        display: block;
-        padding: 8px;
-    }
-}
 
 #recommendationBox {
     max-width: 500px;
-    background-color: #ffffff;
+    background-color: #f3f9ff;
     margin: 30px auto;
     padding: 25px;
     border-radius: 12px;
     text-align: center;
+    color: rgb(0, 0, 0);
     animation: fadeIn 0.8s ease-in-out;
 }
+
 
 #recommendationBox h3 {
     font-size: 1.4em;
@@ -110,12 +119,22 @@
     line-height: 1.5;
 }
 
-#recommendationBox {
-    background-color: #f3f9ff;
-    padding: 12px;
-    border-radius: 10px;
-    margin-top: 15px;
-    color: rgb(0, 0, 0);
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-transition {
+    animation: fadeIn .8s ease-in-out;
 }
 
 
+.slide-in {
+    animation: slideIn 0.5s ease-out;
+}
+
+
+@keyframes slideIn {
+    from { transform: translateX(30px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
